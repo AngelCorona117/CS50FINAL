@@ -12,6 +12,6 @@
 
 <h3> SQL DATABASE TABLES EXPLAINED:</h3>
 
-
+prueba
 
 ![image](https://user-images.githubusercontent.com/114787259/224226878-1f4c807f-abed-45c2-9902-f7a9a3116e77.png)
