@@ -11,4 +11,4 @@
 <p>CSS </p>
 
 <h3>*DATABASE TABLES EXPLAINED:</h3>
-![image](https://user-images.githubusercontent.com/114787259/224223231-6eea0c66-db55-482e-a107-12ed4c88bd0d.png)
+![image](https://user-images.githubusercontent.com/114787259/224226878-1f4c807f-abed-45c2-9902-f7a9a3116e77.png)
