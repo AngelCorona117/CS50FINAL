@@ -10,7 +10,7 @@
 <p>HTML </p>
 <p>CSS </p>
 
-<h3>*DATABASE TABLES EXPLAINED:</h3>
+<h3> SQL DATABASE TABLES EXPLAINED:</h3>
 
 
 
