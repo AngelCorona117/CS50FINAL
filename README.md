@@ -1,7 +1,5 @@
 
-<h1>CS50 Week 11 Final Proyect:</h1>
-<h2>STORE50!!!</h2>
-
+<h1>CS50 Week 11 Final Proyect: STORE50!!!</h1>
 <h3>Backend languagues and framewors:</h3>
 <p>Python </p>
 <p>SQL </p>
