@@ -34,8 +34,6 @@ def contact():
 
 @app.route("/devMode", methods=["GET"])
 def dev():
-    db.execute("INSERT INTO users (username, hash) VALUES ('Cardinal', '123');")
-
     return render_template("devMode.html")
 
 if __name__ == '__main__':
