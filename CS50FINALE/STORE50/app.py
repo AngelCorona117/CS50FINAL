@@ -9,6 +9,90 @@ app.secret_key = "asdkasjfñlsdkfjslffyjypñ45604693045'34853'9429592457"
 db = SQL("sqlite:///store.db")
 
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if "user_id" in session:
+        flash("already Registered")
+        return render_template("home.html")
+
+    elif request.method == "POST":
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        # ensure correct usage
+        if not username or not password:
+            flash('Incorrect usage, please provide a password and a username', "error")
+            return redirect(url_for('register'))
+        elif confirmation != password:
+            flash('Password and confirmation do not match', "error")
+            return redirect(url_for('register'))
+
+        # hash the password for security purpouses
+        hashedPassword = generate_password_hash(password)
+
+        # if the user provided a  valid password and a username
+        userId = db.execute(
+            "SELECT id FROM users WHERE username=?;", username)
+        # ensure name is not taken
+        if len(userId) > 0:
+            flash("Username already taken")
+            return redirect(url_for('register'))
+
+        # user provided a non taken user and a password, register user
+        db.execute("INSERT INTO users (username, hash) VALUES (? , ?);",
+                   username, hashedPassword)
+
+        # Remember which user has logged in
+        session["user_id"] = userId
+        flash("Congrats! You were registered")
+        return render_template("home.html")
+
+    return render_template("register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if "user_id" in session:
+        flash("already Registered")
+        return render_template("home.html")
+
+    if request.method == "GET":
+        return render_template("login.html")
+
+    elif request.method == "POST":
+        # ensure correct usage
+        loginUsername = request.form.get("username")
+        loginPassword = request.form.get("password")
+        if not loginUsername or not loginPassword:
+            flash("Must provide a username and a password")
+            return redirect(url_for('login'))
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?",
+                          loginUsername)
+
+        # password compare returns true if both passwords match
+        try:
+            passwordCompare = check_password_hash(
+                rows[0]["hash"], loginPassword)
+        except:
+            flash("None users found")
+            return redirect(url_for('login'))
+
+        # if passwords dont match or there is more than 1 user with that name
+        if len(rows) > 1 or passwordCompare == False:
+            flash("None user found")
+            return redirect(url_for('login'))
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        # Redirect user to home page
+        return redirect(url_for('home'))
+
+
 @app.route("/", methods=["GET"])
 def home():
     return render_template("home.html")
@@ -37,43 +121,6 @@ def about():
 @app.route("/contact", methods=["GET"])
 def contact():
     return render_template("contact.html")
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-
-        username = request.form.get("username")
-        password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
-
-        # ensure correct usage
-        if not username or not password:
-            flash('Incorrect usage, please provide a password and a username', "error")
-            return redirect(url_for('register'))
-        elif confirmation != password:
-            flash('Password and confirmation do not match', "error")
-            return redirect(url_for('register'))
-
-        # hash the password for security purpouses
-        hashedPassword = generate_password_hash(password)
-
-        # if the user provided a  valid password and a username
-        userId = db.execute(
-            "SELECT id FROM users WHERE username=?;", username)
-        # ensure name is not taken
-        if len(userId) > 0:
-            flash("Username already taken")
-            return redirect(url_for('register'))
-
-        # user provided a non taken user and a password, register user
-        db.execute("INSERT INTO users (username, hash) VALUES (? , ?);",
-                   username, hashedPassword)
-        session["user_id"]=userId
-        flash("Congrats! You were registered")
-        return render_template("home.html")
-
-    return render_template("register.html")
 
 
 if __name__ == '__main__':
