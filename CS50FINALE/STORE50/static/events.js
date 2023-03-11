@@ -1,4 +1,4 @@
-//layout events
+//layout events (nav Bar)
 let navBtn = document.querySelector("#select-display");
 let navOptions = document.querySelector(".display-option");
 
