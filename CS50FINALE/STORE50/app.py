@@ -13,7 +13,7 @@ db = SQL("sqlite:///store.db")
 def register():
     if "user_id" in session:
         flash("already Registered")
-        return render_template("home.html")
+        return redirect(url_for('home'))
 
     elif request.method == "POST":
 
@@ -47,7 +47,8 @@ def register():
         # Remember which user has logged in
         session["user_id"] = userId
         flash("Congrats! You were registered")
-        return render_template("home.html")
+
+        return redirect(url_for('home'))
 
     return render_template("register.html")
 
@@ -59,6 +60,7 @@ def login():
         return render_template("home.html")
 
     if request.method == "GET":
+
         return render_template("login.html")
 
     elif request.method == "POST":
@@ -93,34 +95,66 @@ def login():
         return redirect(url_for('home'))
 
 
+@app.route("/logout", methods=["GET"])
+def logout():
+    session.clear()
+    #hide logs if user log out
+    return redirect(url_for('register'))
+
+
 @app.route("/", methods=["GET"])
 def home():
-    return render_template("home.html")
+    if not "user_id" in session:
+        flash("User not found, please login")
+        return redirect(url_for('register'))
 
-
-@app.route("/home", methods=["GET"])
-def main():
-    return render_template("home.html")
+    # user is loged in hide logs
+    hide = True
+    return render_template("home.html", hide=hide)
 
 
 @app.route("/newReleases", methods=["GET"])
 def newReleases():
-    return render_template("newReleases.html")
+    if not "user_id" in session:
+        flash("User not found, please login")
+        return redirect(url_for('register'))
+
+    # user is loged in hide logs
+    hide = True
+    return render_template("newReleases.html", hide=hide)
 
 
 @app.route("/shopping", methods=["GET"])
 def shopping():
-    return render_template("shopping.html")
+    if not "user_id" in session:
+        flash("User not found, please login")
+        return redirect(url_for('register'))
+
+    # user is loged in hide logs
+    hide = True
+    return render_template("shopping.html", hide=hide)
 
 
 @app.route("/aboutUs", methods=["GET"])
 def about():
-    return render_template("aboutUs.html")
+    if not "user_id" in session:
+        flash("User not found, please login")
+        return redirect(url_for('register'))
+
+    # user is loged in hide logs
+    hide = True
+    return render_template("aboutUs.html", hide=hide)
 
 
 @app.route("/contact", methods=["GET"])
 def contact():
-    return render_template("contact.html")
+    if not "user_id" in session:
+        flash("User not found, please login")
+        return redirect(url_for('register'))
+
+    # user is loged in hide logs
+    hide = True
+    return render_template("contact.html", hide=hide)
 
 
 if __name__ == '__main__':

@@ -14,14 +14,14 @@
     <nav id="main-nav-bar">
         <span id="main-title">Store50</span>
         <div id="main-option-container">
-            <a href="/register">Register</a>
-            <a href="/login">Login</a>
-            <a href="/home">Home</a>
+            <a href="/">Home</a>
             <a href="/newReleases">New Releases</a>
             <a href="/shopping">Shoping Cart</a>
             <a href="/aboutUs">About Us</a>
             <a href="/contact">Contact</a>
-            
+            <a href="/register" class="{% if hide %}hidden{% endif %}">Register</a>
+            <a href="/logout" class="{% if hideLogs %}hidden{% endif %}">Logout</a>
+            <a href="/login" class="{% if hide %}hidden{% endif %}" class="{% if hideLogs %}hidden{% endif %}">Login</a>
         </div>
         <span id="CS50">CS50</span>
 
@@ -38,16 +38,20 @@
     </nav>
 
     <div class="display-option hidden">
-        <a href="/register">Register</a>
-        <a href="/login">Login</a>
-        <a href="/home">Home</a>
+        <a href="/">Home</a>
         <a href="/newReleases">New Releases</a>
         <a href="/shopping">Shoping Cart</a>
         <a href="/aboutUs">About Us</a>
         <a href="/contact">Contact</a>
 
+        {% if not hide %}
+        <a href="/login" >Login</a>
+        <a href="/register" >Register</a>
+        {% endif %}
+        <a href="/logout">Logout</a>
+
     </div>
-    
+
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>
