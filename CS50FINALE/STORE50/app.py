@@ -49,6 +49,7 @@ def register():
         flash("Congrats! You were registered")
 
         return redirect(url_for('home'))
+    
 
     return render_template("register.html")
 
