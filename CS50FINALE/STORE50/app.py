@@ -2,6 +2,7 @@ import os
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from cs50 import SQL
 from werkzeug.security import check_password_hash, generate_password_hash
+
 app = Flask(__name__)
 app.secret_key = "asdkasjfñlsdkfjslffyjypñ45604693045'34853'9429592457"
 
@@ -35,6 +36,7 @@ def register():
         # if the user provided a  valid password and a username
         userId = db.execute(
             "SELECT id FROM users WHERE username=?;", username)
+        
         # ensure name is not taken
         if len(userId) > 0:
             flash("Username already taken")
@@ -49,7 +51,6 @@ def register():
         flash("Congrats! You were registered")
 
         return redirect(url_for('home'))
-    
 
     return render_template("register.html")
 
@@ -99,8 +100,26 @@ def login():
 @app.route("/logout", methods=["GET"])
 def logout():
     session.clear()
-    #hide logs if user log out
+    # hide logs if user log out
     return redirect(url_for('register'))
+
+
+@app.route("/dev", methods=["GET"])
+def dev():
+    #select admin id
+    DevId = db.execute(
+        "SELECT id FROM users WHERE username= ? ;", 'Aurora')
+    DevId = DevId[0]["id"]
+    
+    # check if you have admin access
+    if session.get('user_id') is DevId:
+        return render_template("dev.html")
+    
+    #if not check if you are registered
+    elif not "user_id" in session:
+        return redirect(url_for('register'))
+
+    return redirect(url_for('home'))
 
 
 @app.route("/", methods=["GET"])
@@ -109,9 +128,7 @@ def home():
         flash("User not found, please login")
         return redirect(url_for('register'))
 
-    # user is loged in hide logs
-    hide = True
-    return render_template("home.html", hide=hide)
+    return render_template("home.html")
 
 
 @app.route("/newReleases", methods=["GET"])
@@ -120,9 +137,7 @@ def newReleases():
         flash("User not found, please login")
         return redirect(url_for('register'))
 
-    # user is loged in hide logs
-    hide = True
-    return render_template("newReleases.html", hide=hide)
+    return render_template("newReleases.html")
 
 
 @app.route("/shopping", methods=["GET"])
@@ -131,9 +146,7 @@ def shopping():
         flash("User not found, please login")
         return redirect(url_for('register'))
 
-    # user is loged in hide logs
-    hide = True
-    return render_template("shopping.html", hide=hide)
+    return render_template("shopping.html")
 
 
 @app.route("/aboutUs", methods=["GET"])
@@ -142,9 +155,7 @@ def about():
         flash("User not found, please login")
         return redirect(url_for('register'))
 
-    # user is loged in hide logs
-    hide = True
-    return render_template("aboutUs.html", hide=hide)
+    return render_template("aboutUs.html")
 
 
 @app.route("/contact", methods=["GET"])
@@ -153,9 +164,7 @@ def contact():
         flash("User not found, please login")
         return redirect(url_for('register'))
 
-    # user is loged in hide logs
-    hide = True
-    return render_template("contact.html", hide=hide)
+    return render_template("contact.html")
 
 
 if __name__ == '__main__':
